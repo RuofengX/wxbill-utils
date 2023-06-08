@@ -13,7 +13,8 @@ session_id = str(uuid4().hex)[:6]
 # TITLE
 # caption
 # []guide
-# []log
+# []result
+
 st.set_page_config(
     page_title="微信PDF账单转换",
     page_icon=":cd:",
