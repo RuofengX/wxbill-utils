@@ -3,6 +3,7 @@
         "astype",
         "chunksize",
         "openai",
+        "openpyxl",
         "pdfplumber",
         "pipreqs",
         "stqdm",

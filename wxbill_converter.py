@@ -69,10 +69,10 @@ def get_df(wxbill, add_meta, drop_dup):
     if wxbill == []:
         result.error("请完成第一步上传文件", icon="🚨")
     else:
-        for i in tqdm(wxbill, desc="批量转换文件", total=len(wxbill), st_container=result):
-            df = pandas.DataFrame()
+        df = pandas.DataFrame()
+        for i in tqdm(wxbill, desc="批量转换文件", total=len(wxbill), st_container=guide):
             df = pandas.concat(
-                [df, wxbill_to_df(i, add_meta=add_meta, processor_container=result)],
+                [df, wxbill_to_df(i, add_meta=add_meta, processor_container=guide)],
                 ignore_index=True,
             )
         if drop_dup:
@@ -91,7 +91,7 @@ guide.button(":arrows_clockwise:转换", on_click=get_df, args=(wxbill, add_meta
 
 guide.subheader("第四步 下载表格文件")
 if "df" in st.session_state:
-    result.dataframe(st.session_state["df"], height=620, use_container_width=True)
+    result.dataframe(st.session_state["df"], use_container_width=True)
     guide.download_button(
         ":arrow_double_down:下载",
         st.session_state["buffer"],

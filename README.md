@@ -12,8 +12,7 @@
 `python -m streamlit run wxbill_converter.py`
 
 ## 开发
-使用
 ```shell
 pipreqs --ignore ".venv"  --force --encoding=utf8 --mode no-pin .
 ```
-更新依赖
+更新依赖后记得手动添加openpyxl

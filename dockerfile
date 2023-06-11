@@ -8,13 +8,10 @@ ADD . /app
 WORKDIR /app
 
 # 安装依赖包
-RUN pip install --upgrade pip && pip install -r requirements.txt
-
-# 设置环境变量
-ENV PORT 9000
+RUN pip install -r requirements.txt --index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
 # 对外暴露端口
-EXPOSE ${PORT}
+EXPOSE 9000
 
 # 启动应用
-CMD ["streamlit", "run", "wxbill_converter.py"' "--server.port", "8000"]
+CMD ["streamlit", "run", "wxbill_converter.py","--browser.gatherUsageStats", "false", "--server.port", "9000"]
