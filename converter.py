@@ -1,11 +1,10 @@
 import pathlib
-from formatter import format_date
+from utils import format_date
 from io import BufferedReader, BytesIO
 from typing import Any
 
 import pandas
 import pdfplumber
-import streamlit as st
 from stqdm import stqdm as tqdm
 
 TITLE = ["交易单号", "交易时间", "交易类型", "收/支/其他", "交易方式", "金额(元)", "交易对方", "商户单号"]
@@ -20,7 +19,7 @@ def wxbill_to_df(
     file: str | pathlib.Path | BufferedReader | BytesIO,
     *,
     add_meta: bool = False,
-    processor_container: st.container,
+    processor_container,
 ) -> pandas.DataFrame:
     """将微信PDF账单导出为DataFrame"""
 
