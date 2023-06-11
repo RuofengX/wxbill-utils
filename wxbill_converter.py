@@ -1,5 +1,5 @@
-from uuid import uuid4
 from io import BytesIO
+from uuid import uuid4
 
 import pandas
 import streamlit as st
@@ -36,6 +36,7 @@ st.divider()
 guide = st.sidebar
 
 guide.caption("操作指南")
+progress = result.container()
 result.caption("预览")
 if "df" not in st.session_state:
     result.text(
@@ -69,33 +70,41 @@ def get_df(wxbill, add_meta, drop_dup):
     if wxbill == []:
         result.error("请完成第一步上传文件", icon="🚨")
     else:
+        # 生成DF
         df = pandas.DataFrame()
-        for i in tqdm(wxbill, desc="批量转换文件", total=len(wxbill), st_container=guide):
+        for i in tqdm(wxbill, desc="批量转换文件", total=len(wxbill), st_container=st):
             df = pandas.concat(
-                [df, wxbill_to_df(i, add_meta=add_meta, processor_container=guide)],
+                [df, wxbill_to_df(i, add_meta=add_meta, processor_container=st)],
                 ignore_index=True,
             )
-        if drop_dup:
-            df.drop_duplicates(["交易单号"], inplace=True)
 
-        buffer = BytesIO()
-        with pandas.ExcelWriter(buffer) as w:
-            df.to_excel(w, index=False)
-
-        st.session_state["df"] = df
-        st.session_state["buffer"] = buffer
+        # 生成Excel
+        with st.spinner("转换完成，请稍后"):
+            buffer = BytesIO()
+            with pandas.ExcelWriter(buffer) as w:
+                df.to_excel(w, index=False)
+            if drop_dup:
+                df.drop_duplicates(["交易单号"], inplace=True)
+            st.session_state["df"] = df
+            st.session_state["buffer"] = buffer
 
 
 guide.subheader("第三步 读取PDF并转换为表格")
-guide.button(":arrows_clockwise:转换", on_click=get_df, args=(wxbill, add_meta, drop_dup))
+guide.button(
+    ":arrows_clockwise:转换",
+    on_click=get_df,
+    args=(wxbill, add_meta, drop_dup),
+    use_container_width=True,
+    )
 
 guide.subheader("第四步 下载表格文件")
 if "df" in st.session_state:
     result.dataframe(st.session_state["df"], use_container_width=True)
     guide.download_button(
-        ":arrow_double_down:下载",
+        ":arrow_double_down:保存",
         st.session_state["buffer"],
         file_name=f"{session_id}-微信账单转换结果.xlsx",
+        use_container_width=True,
     )
 else:
     guide.caption("还没有上传文件")

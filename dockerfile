@@ -8,7 +8,7 @@ ADD . /app
 WORKDIR /app
 
 # 安装依赖包
-RUN pip install -r requirements.txt --index-url https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install -r requirements.txt --index-url https://mirrors.cloud.tencent.com/pypi/simple
 
 # 对外暴露端口
 EXPOSE 9000
