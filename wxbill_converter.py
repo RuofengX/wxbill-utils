@@ -67,35 +67,35 @@ wxbill = guide.file_uploader(
 
 def get_df(wxbill, add_meta, drop_dup):
     df = pandas.DataFrame()
-    if wxbill == []:
-        result.error("请完成第一步上传文件", icon="🚨")
-    else:
-        # 生成DF
-        df = pandas.DataFrame()
-        for i in tqdm(wxbill, desc="批量转换文件", total=len(wxbill), st_container=st):
-            df = pandas.concat(
-                [df, wxbill_to_df(i, add_meta=add_meta, processor_container=st)],
-                ignore_index=True,
-            )
+    # 生成DF
+    df = pandas.DataFrame()
+    for i in tqdm(wxbill, desc="批量转换文件", total=len(wxbill), st_container=st):
+        df = pandas.concat(
+            [df, wxbill_to_df(i, add_meta=add_meta, processor_container=st)],
+            ignore_index=True,
+        )
 
-        # 生成Excel
-        with st.spinner("转换完成，请稍后"):
-            buffer = BytesIO()
-            with pandas.ExcelWriter(buffer) as w:
-                df.to_excel(w, index=False)
-            if drop_dup:
-                df.drop_duplicates(["交易单号"], inplace=True)
-            st.session_state["df"] = df
-            st.session_state["buffer"] = buffer
+    # 生成Excel
+    with st.spinner("转换完成，请稍后"):
+        buffer = BytesIO()
+        with pandas.ExcelWriter(buffer) as w:
+            df.to_excel(w, index=False)
+        if drop_dup:
+            df.drop_duplicates(["交易单号"], inplace=True)
+        st.session_state["df"] = df
+        st.session_state["buffer"] = buffer
 
 
 guide.subheader("第三步 读取PDF并转换为表格")
-guide.button(
-    ":arrows_clockwise:转换",
-    on_click=get_df,
-    args=(wxbill, add_meta, drop_dup),
-    use_container_width=True,
-    )
+if wxbill:
+    guide.button(
+        ":arrows_clockwise:转换",
+        on_click=get_df,
+        args=(wxbill, add_meta, drop_dup),
+        use_container_width=True,
+        )
+else:
+    guide.caption("还没有上传文件")
 
 guide.subheader("第四步 下载表格文件")
 if "df" in st.session_state:

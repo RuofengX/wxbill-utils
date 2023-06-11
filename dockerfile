@@ -1,5 +1,5 @@
-# 使用python3.9镜像作为基础镜像
-FROM python:3.11
+# 使用python最新镜像作为基础镜像
+FROM python:slim
 
 # 将当前目录添加到容器中的 /app 目录
 ADD . /app
