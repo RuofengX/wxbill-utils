@@ -4,6 +4,7 @@
         "chunksize",
         "openai",
         "pdfplumber",
+        "pipreqs",
         "stqdm",
         "streamlit",
         "tqdm",

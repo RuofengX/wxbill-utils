@@ -1,5 +1,5 @@
 pandas
+pandas
 pdfplumber
+stqdm
 streamlit
-tqdm
-openpyxl

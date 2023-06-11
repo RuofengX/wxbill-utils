@@ -65,6 +65,7 @@ wxbill = guide.file_uploader(
 
 
 def get_df(wxbill, add_meta, drop_dup):
+    df = pandas.DataFrame()
     if wxbill == []:
         result.error("请完成第一步上传文件", icon="🚨")
     else:
